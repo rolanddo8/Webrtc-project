@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Grid, Typography, Paper, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { SocketContext } from '../Context';
+import { SocketContext } from '../contexts/SocketContext';
 
 const useStyles = makeStyles((theme) => ({
     video: {
@@ -21,21 +21,22 @@ const useStyles = makeStyles((theme) => ({
         padding: '10px',
         border: '2px solid black',
         margin: '10px',
-    },
+    }
+
 }));
 
 const VideoCallPlayer = () => {
     const classes = useStyles();
-    const { name, callAccepted, myVideo, userVideo, callEnded, stream, call, screenStream, myScreenVideo } = useContext(SocketContext);
-
+    const { name, callAccepted, myVideoRef, incomingStream, userVideoRef, callEnded, myVideo, connectionInfo, screenStream, myScreenVideoRef, userScreenVideo, userScreenVideoRef } = useContext(SocketContext);
+    console.log("VideoCallPlayer---", myVideo)
     return (
         <Grid container className={classes.gridContainer}>
             {/* Our own video */}
-            {stream && (
+            {myVideo && (
                 <Paper className={classes.paper}>
                     <Grid item xs={12} md={6}>
                         <Typography variant="h5" gutterBottom>{name || 'Unknown User'}</Typography>
-                        <video playsInline muted ref={myVideo} autoPlay className={classes.video} />
+                        <video playsInline muted ref={myVideoRef} autoPlay className={classes.video} />
                     </Grid>
                 </Paper>
             )}
@@ -44,7 +45,17 @@ const VideoCallPlayer = () => {
                 <Paper className={classes.paper}>
                     <Grid item xs={12} md={6}>
                         <Typography variant="h5" gutterBottom>My Screen</Typography>
-                        <video playsInline muted ref={myScreenVideo} autoPlay className={classes.video} />
+                        <video playsInline muted ref={myScreenVideoRef} autoPlay className={classes.video} />
+                    </Grid>
+                </Paper>
+            )}
+            {/* User screen sharing */}
+            {incomingStream && (
+                <Paper className={classes.paper}>
+                    <Grid item xs={12} md={6}>
+                        <Typography variant="h5" gutterBottom>{connectionInfo.name || "Unknown User's screen"}</Typography>
+                        <video playsInline muted ref={userScreenVideoRef} autoPlay className={classes.video} />
+                        {console.log("error123")}
                     </Grid>
                 </Paper>
             )}
@@ -52,8 +63,9 @@ const VideoCallPlayer = () => {
             {callAccepted && !callEnded && (
                 <Paper className={classes.paper}>
                     <Grid item xs={12} md={6}>
-                        <Typography variant="h5" gutterBottom>{call.name || 'Unknown User'}</Typography>
-                        <video playsInline ref={userVideo} autoPlay className={classes.video} />
+                        <Typography variant="h5" gutterBottom>{connectionInfo.name || 'Unknown User'}</Typography>
+                        <video playsInline ref={userVideoRef} autoPlay className={classes.video} />
+                        {console.log(userVideoRef)}
                     </Grid>
                 </Paper>
             )}

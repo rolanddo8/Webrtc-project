@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import VideoCallPlayer from '../components/VideoCallPlayer';
 import Option from '../components/Option';
 import Notifications from '../components/Notifications';
+import Chats from '../components/Chats';
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -36,13 +37,14 @@ const HomePage = () => {
     const classes = useStyles();
     return (
         <>
-            <AppBar className={classes.appBar} position="static" color="inherit">
+            {/* <AppBar className={classes.appBar} position="static" color="inherit">
                 <Typography variant="h2" align="center">Video Call App</Typography>
             </AppBar>
             <VideoCallPlayer />
             <Option>
                 <Notifications />
-            </Option>
+            </Option> */}
+            <Chats />
         </>
     )
 };

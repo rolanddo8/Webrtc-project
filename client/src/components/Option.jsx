@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Assignment, Phone, PhoneDisabled } from '@material-ui/icons'
 
-import { SocketContext } from '../Context';
+import { SocketContext } from '../contexts/SocketContext';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -38,14 +38,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Option = ({ children }) => {
-    const { me, callAccepted, name, setName, callEnded, leaveCall, callUser, startStream } = useContext(SocketContext);
+    const { myId, callAccepted, name, setName, callEnded, leaveCall, callUser, startStream } = useContext(SocketContext);
     const [idToCall, setIdToCall] = useState('');
     const classes = useStyles();
 
     return (
         <Container className={classes.container}>
             <Paper elevation={10} className={classes.paper}>
-                <Button variant="contained" color="primary" fullWidth onClick={startStream} startIcon={<Assignment fontSize="large" />}>
+                <Button variant="contained" color="primary" fullWidth onClick={() => {
+                    startStream(idToCall)
+                }} startIcon={<Assignment fontSize="large" />}>
                     Start screen sharing
                 </Button>
                 <form className={classes.root} noValidate autoComplete="off">
@@ -53,7 +55,7 @@ const Option = ({ children }) => {
                         <Grid item xs={12} md={6} className={classes.padding}>
                             <Typography gutterBottom variant="h6">Account Info</Typography>
                             <TextField label="Name" value={name} onChange={(e) => setName(e.target.value)} fullWidth />
-                            <CopyToClipboard text={me} className={classes.margin}>
+                            <CopyToClipboard text={myId} className={classes.margin}>
                                 <Button variant="contained" color="primary" fullWidth startIcon={<Assignment fontSize="large" />}>
                                     Copy Your ID
                                 </Button>
@@ -76,7 +78,7 @@ const Option = ({ children }) => {
                 </form>
                 {children}
             </Paper>
-        </Container>
+        </Container >
     );
 };
 
